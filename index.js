@@ -2,6 +2,8 @@ const express =  require('express');
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const usersRouter = require('./src/users/routes')
+const AuthRouter = require('./src/auth/routes')
+
 
 
 
@@ -12,4 +14,5 @@ app
   .use(cors())
   .use(bodyParser.json())
   .use(usersRouter)
+  .use(AuthRouter)
   .listen(port, () => console.log(`Listening on port ${port}`))
