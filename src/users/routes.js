@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const { toJWT } = require('../auth/jwt')
 const User = require('./model')
 const bcrypt = require('bcrypt');
 
@@ -16,7 +17,9 @@ router.post('/users',(req, res, next) => {
         return res.status(404).send({
           message: 'could not find the user'
         })
-      } return res.status(201).send(user)
+      } return res.status(201).send({
+        jwt: toJWT({ userId: user.id })
+      })
     })
     .catch(next)
 })
