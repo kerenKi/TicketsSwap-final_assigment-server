@@ -10,7 +10,7 @@ router.get('/tickets',(req, res, next) => {
     .findAll({
       include:[ 
         { model: User, attributes: ['name'] },
-        { model:Event, attributes: ['name'] }
+        { model: Event, attributes: ['name'] }
       ]
     })
     .then(tickets => res.send({ tickets }))
@@ -21,7 +21,10 @@ router.get('/tickets/:id', (req, res, next) => {
   Ticket
     .findByPk(req.params.id,
       { 
-      include:[{ model: User, attributes: ['name'] },{model:Event, attributes:['name']}]
+      include:[
+        { model: User, attributes: ['name'] },
+        { model: Event, attributes:['name'] }
+      ]
      })
     .then(ticket => {
       if (!ticket) {
@@ -34,7 +37,6 @@ router.get('/tickets/:id', (req, res, next) => {
 })
 
 router.post('/tickets',(req, res, next) => {
-  console.log('req.body',req.body)
   Ticket
     .create(req.body)
     .then(ticket => {
@@ -55,8 +57,7 @@ router.put('/tickets/:id',(req, res, next) => {
         return res.status(404).send({
           message: 'could not find the ticket'
         })
-    
-  } return ticket.update(req.body).then(ticket => res.send(ticket))
+      } return ticket.update(req.body).then(ticket => res.send(ticket))
     })
     .catch(next)
 })

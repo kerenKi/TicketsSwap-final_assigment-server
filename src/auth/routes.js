@@ -1,9 +1,6 @@
 const { Router } = require('express')
 const { toJWT } = require('./jwt')
-//crypt the password from string to hash
 const bcrypt = require('bcrypt');
-
-//Importing the user model from model file
 const User = require('../users/model')
 //Importing the auth middleware function 
 const authorization = require('./middleware')

@@ -1,13 +1,8 @@
-//Importing from express
 const { Router } = require('express')
-//Importing the user model from model file
 const User = require('./model')
-//crypt the password from string to hash
 const bcrypt = require('bcrypt');
 
 const router = new Router()
-
-//Route handlers: what we do with a request to './signup' route:
 
 router.post('/users',(req, res, next) => {
   User
@@ -26,6 +21,4 @@ router.post('/users',(req, res, next) => {
     .catch(next)
 })
 
-
-//export so we can import and use it at index.js 
 module.exports = router

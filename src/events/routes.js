@@ -1,5 +1,4 @@
 const { Router } = require('express')
-//Importing the Event model from model file
 const Event = require('./model')
 const User = require('../users/model')
 
@@ -16,7 +15,9 @@ router.get('/events',(req, res, next) => {
 
 router.get('/events/:id', (req, res, next) => {
   Event
-    .findByPk(req.params.id, { include:[{ model: User, attributes: ['name'] }] })
+    .findByPk(req.params.id, { 
+      include:[{ model: User, attributes: ['name'] }] 
+    })
     .then(event => {
       if (!event) {
         return res.status(404).send({
@@ -48,8 +49,7 @@ router.put('/events/:id',(req, res, next) => {
         return res.status(404).send({
           message: 'could not find the event'
         })
-    
-  } return event.update(req.body).then(event => res.send(event))
+      } return event.update(req.body).then(event => res.send(event))
     })
     .catch(next)
 })
@@ -69,6 +69,4 @@ router.delete('/events/:id', (req, res, next) => {
     .catch(next)
 })
 
-
-//export so we can import and use it at index.js 
 module.exports = router

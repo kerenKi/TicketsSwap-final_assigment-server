@@ -3,7 +3,6 @@ const sequelize = require('../../db')
 const User = require('../users/model')
 const Event = require('../events/model')
 
-
 const Ticket = sequelize.define('tickets', {
   picture: {
     type: Sequelize.STRING,
@@ -40,6 +39,5 @@ Ticket.belongsTo(User,{
 Ticket.belongsTo(Event,{
   "foreignKey": "event_id",
 })
-
 
 module.exports = Ticket

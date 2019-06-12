@@ -3,7 +3,6 @@ const sequelize = require('../../db')
 const User = require('../users/model')
 const Ticket = require('../tickets/model')
 
-
 const Comment = sequelize.define('comments', {
   text: {
     type: Sequelize.STRING,
@@ -26,7 +25,8 @@ const Comment = sequelize.define('comments', {
 
 Comment.belongsTo(Ticket,{
   "foreignKey": "ticket_id",
-})
+}) 
+
 Comment.belongsTo(User,{
   "foreignKey": "user_id",
 })

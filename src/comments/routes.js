@@ -21,7 +21,10 @@ router.get('/comments/:id', (req, res, next) => {
   Comment
     .findByPk(req.params.id,
       { 
-      include:[{ model: User, attributes: ['name'] },{model: Ticket, attributes:['id','description']}]
+      include:[
+        { model: User, attributes: ['name'] },
+        { model: Ticket, attributes:['id','description'] }
+      ]
      })
     .then(comment => {
       if (!comment) {
@@ -34,7 +37,6 @@ router.get('/comments/:id', (req, res, next) => {
 })
 
 router.post('/comments',(req, res, next) => {
-  console.log('req.body',req.body)
   Comment
     .create(req.body)
     .then(comment => {
@@ -55,8 +57,7 @@ router.put('/comments/:id',(req, res, next) => {
         return res.status(404).send({
           message: 'could not find the comment'
         })
-    
-  } return comment.update(req.body).then(comment => res.send(comment))
+      } return comment.update(req.body).then(comment => res.send(comment))
     })
     .catch(next)
 })
@@ -76,6 +77,4 @@ router.delete('/comments/:id', (req, res, next) => {
     .catch(next)
 })
 
-
-//export so we can import and use it at index.js 
 module.exports = router

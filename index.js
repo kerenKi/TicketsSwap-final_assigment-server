@@ -8,8 +8,6 @@ const TicketRouter = require('./src/tickets/routes')
 const CommentRouter = require('./src/comments/routes')
 
 
-
-
 const app = express()
 const port = process.env.PORT || 4000
 
