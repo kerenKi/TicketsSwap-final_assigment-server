@@ -1,9 +1,10 @@
 const express =  require('express');
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const AuthRouter = require('./src/auth/routes')
 const UserRouter = require('./src/users/routes')
 const EventRouter = require('./src/events/routes')
-const AuthRouter = require('./src/auth/routes')
+const TicketRouter = require('./src/tickets/routes')
 
 
 
@@ -17,4 +18,5 @@ app
   .use(AuthRouter)
   .use(UserRouter)
   .use(EventRouter)
+  .use(TicketRouter)
   .listen(port, () => console.log(`Listening on port ${port}`))
