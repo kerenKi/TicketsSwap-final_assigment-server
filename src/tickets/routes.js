@@ -19,7 +19,6 @@ router.get('/tickets',(req, res, next) => {
 
 router.get('/tickets/:id', (req, res, next) => {
   Ticket
-  //add Event model later
     .findByPk(req.params.id,
       { 
       include:[{ model: User, attributes: ['name'] },{model:Event, attributes:['name']}]
@@ -77,6 +76,4 @@ router.delete('/tickets/:id', (req, res, next) => {
     .catch(next)
 })
 
-
-//export so we can import and use it at index.js 
 module.exports = router
