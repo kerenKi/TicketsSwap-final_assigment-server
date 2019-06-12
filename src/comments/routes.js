@@ -10,7 +10,7 @@ router.get('/comments',(req, res, next) => {
     .findAll({
       include:[ 
         { model: User, attributes: ['name'] },
-        { model: Ticket, attributes: ['id','description'] }
+        { model: Ticket, attributes: ['id','title'] }
       ]
     })
     .then(comments => res.send({ comments }))
@@ -23,7 +23,7 @@ router.get('/comments/:id', (req, res, next) => {
       { 
       include:[
         { model: User, attributes: ['name'] },
-        { model: Ticket, attributes:['id','description'] }
+        { model: Ticket, attributes:['id','title'] }
       ]
      })
     .then(comment => {

@@ -4,6 +4,11 @@ const User = require('../users/model')
 const Event = require('../events/model')
 
 const Ticket = sequelize.define('tickets', {
+  title: {
+    type: Sequelize.STRING,
+    field: 'title',
+    allowNull: false
+  },
   picture: {
     type: Sequelize.STRING,
     field: 'picture',
