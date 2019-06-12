@@ -8,26 +8,24 @@ const authorization = require('./middleware')
 const router = new Router()
 
 router.post('/logins', (req, res)=> {
-  const user_name = req.body.user_name
   const email = req.body.email 
   const password = req.body.password 
 
-  if (!user_name || !email || !password) {
+  if (!email || !password) {
     return res.status(400).send({
-      message: 'Please supply a valid user name, email and password'
+      message: 'Please supply a valid email and password'
     })
   } else {
      // 1. find user based on user_name and email address
      User
       .findOne({
         where: {
-          user_name,
           email
         }
       }).then(entity => {
           if (!entity) {
               res.status(400).send({
-              message:'Could not find a user with that user name and email'
+              message:'Could not find a user with that email and password'
             })
           }
         // 2. use bcrypt.compareSync to check the password against the stored hash
