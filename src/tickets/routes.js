@@ -5,11 +5,14 @@ const User = require('../users/model')
 
 const router = new Router()
 
-router.get('/tickets',(req, res, next) => {
+router.post('/tickets',(req, res, next) => {
   Ticket
     .findAll({
+      where: {
+        event_id: req.body.event_id
+      },
       include:[ 
-        { model: User, attributes: ['name'] },
+        { model: User, attributes: ['user_name'] },
         { model: Event, attributes: ['name'] }
       ]
     })
@@ -22,7 +25,7 @@ router.get('/tickets/:id', (req, res, next) => {
     .findByPk(req.params.id,
       { 
       include:[
-        { model: User, attributes: ['name'] },
+        { model: User, attributes: ['user_name'] },
         { model: Event, attributes:['name'] }
       ]
      })
