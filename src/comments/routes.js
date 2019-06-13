@@ -9,7 +9,7 @@ router.get('/comments',(req, res, next) => {
   Comment
     .findAll({
       include:[ 
-        { model: User, attributes: ['name'] },
+        { model: User, attributes: ['user_name'] },
         { model: Ticket, attributes: ['id','title'] }
       ]
     })
@@ -22,7 +22,7 @@ router.get('/comments/:id', (req, res, next) => {
     .findByPk(req.params.id,
       { 
       include:[
-        { model: User, attributes: ['name'] },
+        { model: User, attributes: ['user_name'] },
         { model: Ticket, attributes:['id','title'] }
       ]
      })

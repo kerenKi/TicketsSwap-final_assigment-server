@@ -7,7 +7,7 @@ const router = new Router()
 router.get('/events',(req, res, next) => {
   Event
     .findAll({
-      include:[{ model: User, attributes: ['name'] }]
+      include:[{ model: User, attributes: ['user_name'] }]
     })
     .then(events => res.send({ events }))
     .catch(next)
@@ -16,7 +16,7 @@ router.get('/events',(req, res, next) => {
 router.get('/events/:id', (req, res, next) => {
   Event
     .findByPk(req.params.id, { 
-      include:[{ model: User, attributes: ['name'] }] 
+      include:[{ model: User, attributes: ['user_name'] }] 
     })
     .then(event => {
       if (!event) {
