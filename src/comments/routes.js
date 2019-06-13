@@ -5,9 +5,12 @@ const User = require('../users/model')
 
 const router = new Router()
 
-router.get('/comments',(req, res, next) => {
+router.post('/comments',(req, res, next) => {
   Comment
     .findAll({
+      where: {
+        ticket_id: req.body.ticket_id
+      },
       include:[ 
         { model: User, attributes: ['user_name'] },
         { model: Ticket, attributes: ['id','title'] }
