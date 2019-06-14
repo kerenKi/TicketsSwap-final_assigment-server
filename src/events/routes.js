@@ -1,6 +1,8 @@
 const { Router } = require('express')
 const Event = require('./model')
 const User = require('../users/model')
+const authorization = require('../auth/middleware')
+
 
 const router = new Router()
 
@@ -28,17 +30,35 @@ router.get('/events/:id', (req, res, next) => {
     .catch(next)
 })
 
-router.post('/events',(req, res, next) => {
-  Event
-    .create(req.body)
+router.post('/add-event',authorization, (req, res, next) => {
+  const { name, picture, description, start_time, end_time } = req.body
+  if (res.locals.user) {
+    const newEvent = {
+      user_id: res.locals.user.id,
+      name,
+      picture, 
+      description, 
+      start_time, 
+      end_time
+    }
+    Event
+    .create(newEvent)
     .then(event => {
       if (!event) {
         return res.status(404).send({
           message: 'could not find the event'
         })
-      } return res.status(201).send(event)
+      } else {
+        return Event
+        .findAll({
+          include:[{ model: User, attributes: ['user_name'] }]
+        })
+        .then(events => res.send({ events }))
+        .catch(next)
+      } 
     })
     .catch(next)
+  }
 })
 
 router.put('/events/:id',(req, res, next) => {
