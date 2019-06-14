@@ -7,7 +7,7 @@ const authorization = require('../auth/middleware')
 const router = new Router()
 
 router.get('/events',(req, res, next) => {
-  const limit = req.query.limit || 5
+  const limit = req.query.limit || 9
   const offset = req.query.offset || 0
 
   Event
@@ -55,10 +55,10 @@ router.post('/add-event',authorization, (req, res, next) => {
         })
       } else {
         return Event
-        .findAll({
+        .findAndCountAll({
           include:[{ model: User, attributes: ['user_name'] }]
         })
-        .then(events => res.send({ events }))
+        .then(events => res.send({ total:events.count, events:events.rows }))
         .catch(next)
       } 
     })
