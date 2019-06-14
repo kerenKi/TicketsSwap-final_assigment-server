@@ -4,10 +4,8 @@ const Comment = require('../comments/model')
 async function TotalTicketsOfAuthor (userId) {
   const total = await Ticket
     .count({ where: {'user_id': userId} }).then(total => {
-      console.log("The author have " + total + " tickets published")
       return total
     })
-  console.log('total tickets for author:', total)  
   return total  
 }
 
@@ -15,26 +13,20 @@ async function AveragePrice (eventId) {
   const average_price = await Ticket
     .findAndCountAll({ where: {'event_id': eventId} })
     .then(result => {
-      console.log('total tickets:', result.count);
       const ticketsSum = result.rows.reduce((totalPrice, ticket) => {
         return totalPrice += Number(ticket.price)},0)
-      console.log('tickets prices:', ticketsSum)
       const average = ticketsSum / result.count
-      console.log('average price:', average)
       return average
     })
     .catch(console.error)
-  console.log('average_price:', average_price)  
   return average_price  
 }
 
 async function TotalComments (ticketId) {
   const total = await Comment
     .count({ where: {'ticket_id': ticketId} }).then(total => {
-      console.log("This ticket have " + total + " comments published")
       return total
     })
-  console.log('total comments:', total)  
   return total  
 }
 
@@ -46,10 +38,6 @@ async function TicketCreatedTime (ticketId) {
           return ticket.created_at 
       })
       .catch(console.error)
-      const timeToDate = new Date(time)
-      console.log('timeToDate', timeToDate)
-      console.log('type of ticket:', typeof time)
-      console.log('hour of ticket:',  time.getHours())
       return time
 }
 
@@ -90,8 +78,7 @@ async function CalculateTicketRisk (userId, eventId, ticketId) {
   if (risk < 5) {
     risk = 5
   }
-  console.log('The risk:',risk)
-  return Math.min(95,risk)
+  return Math.min(95,Math.floor(risk))
 }
 
 module.exports = {
