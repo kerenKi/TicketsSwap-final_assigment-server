@@ -32,6 +32,11 @@ const Ticket = sequelize.define('tickets', {
     type: Sequelize.INTEGER,
     field: 'user_id',
     allowNull: false
+  },
+  created_at: {
+    type: 'TIMESTAMP',
+    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+    allowNull: false
   }
 }, {
   tableName: 'tickets'

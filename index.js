@@ -6,6 +6,7 @@ const UserRouter = require('./src/users/routes')
 const EventRouter = require('./src/events/routes')
 const TicketRouter = require('./src/tickets/routes')
 const CommentRouter = require('./src/comments/routes')
+const { CalculateTicketRisk } = require('./src/risk/functions')
 
 
 const app = express()
@@ -20,3 +21,5 @@ app
   .use(TicketRouter)
   .use(CommentRouter)
   .listen(port, () => console.log(`Listening on port ${port}`))
+
+  // console.log('risk:', CalculateTicketRisk(6,6,1))
