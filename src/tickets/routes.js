@@ -3,7 +3,7 @@ const Ticket = require('./model')
 const Event = require('../events/model')
 const User = require('../users/model')
 const authorization = require('../auth/middleware')
-
+const { CalculateTicketRisk } = require('../risk/functions')
 
 const router = new Router()
 
@@ -36,7 +36,14 @@ router.get('/tickets/:id', (req, res, next) => {
         return res.status(404).send({
           message: 'could not find the ticket'
         })
-      } else { return res.send(ticket) }
+      } else { 
+        console.log('ticket.user_id,ticket.event_id,ticket.id:', ticket.user_id,ticket.event_id,ticket.id)
+        CalculateTicketRisk(ticket.user_id,ticket.event_id,ticket.id)
+        .then(risk => {
+          console.log('risk', risk)
+          return res.send({ticket,risk})
+        })
+      }
     })
     .catch(next)
 })
