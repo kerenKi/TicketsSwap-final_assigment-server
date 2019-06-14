@@ -7,7 +7,7 @@ const authorization = require('../auth/middleware')
 const router = new Router()
 
 router.get('/events',(req, res, next) => {
-  const limit = req.query.limit || 5
+  const limit = req.query.limit || 9
   const offset = req.query.offset || 0
 
   Event
