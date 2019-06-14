@@ -55,10 +55,10 @@ router.post('/add-event',authorization, (req, res, next) => {
         })
       } else {
         return Event
-        .findAll({
+        .findAndCountAll({
           include:[{ model: User, attributes: ['user_name'] }]
         })
-        .then(events => res.send({ events }))
+        .then(events => res.send({ total:events.count, events:events.rows }))
         .catch(next)
       } 
     })
