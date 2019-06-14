@@ -31,4 +31,4 @@ app
   // TotalComments(1)
   // TotalComments(2)
   // TicketCreatedTime(2)
-  console.log('risk:', CalculateTicketRisk(6,6,3))
+  console.log('risk:', CalculateTicketRisk(6,6,1))

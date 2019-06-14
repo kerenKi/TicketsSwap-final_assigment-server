@@ -46,6 +46,10 @@ async function TicketCreatedTime (ticketId) {
           return ticket.created_at 
       })
       .catch(console.error)
+      const timeToDate = new Date(time)
+      console.log('timeToDate', timeToDate)
+      console.log('type of ticket:', typeof time)
+      console.log('hour of ticket:',  time.getHours())
       return time
 }
 
@@ -70,17 +74,19 @@ async function CalculateTicketRisk (userId, eventId, ticketId) {
   }
   if ( ticketPrice < averagePrice ) {
     const riskFactor = 100 - ((ticketPrice * 100) / averagePrice)
-    console.log('min riskFactor',riskFactor)
     risk += riskFactor
   }
   if ( ticketPrice > averagePrice ) {
     const riskCalculate = ((ticketPrice * 100) / averagePrice) - 100
     const decreaseRiskBy = Math.max(10, riskCalculate)
-    console.log('max riskFactor',riskCalculate)
-    console.log('decrease riskFactor',decreaseRiskBy)
     risk -= decreaseRiskBy
   }
-  
+  if (ticketTime.getHours() < 9 || ticketTime.getHours() > 17) {
+    risk += 10
+  } else {
+    risk -= 10
+  }
+
   if (risk < 5) {
     risk = 5
   }
