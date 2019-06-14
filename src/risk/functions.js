@@ -11,7 +11,7 @@ async function TotalTicketsOfAuthor (userId) {
   return total  
 }
 
-async function averagePrice (eventId) {
+async function AveragePrice (eventId) {
   const average_price = await Ticket
     .findAndCountAll({ where: {'event_id': eventId} })
     .then(result => {
@@ -38,9 +38,60 @@ async function TotalComments (ticketId) {
   return total  
 }
 
+async function TicketCreatedTime (ticketId) {
+  const time =  await Ticket
+    .findByPk(ticketId)
+    .then(ticket => {
+      console.log('ticket:', ticket.created_at)
+          return ticket.created_at 
+      })
+      .catch(console.error)
+      return time
+}
+
+async function CalculateTicketRisk (userId, eventId, ticketId) {
+  let risk = 5
+  const totalTickets = await TotalTicketsOfAuthor(userId)
+  const averagePrice = await AveragePrice(eventId)
+  const totalComments = await TotalComments(ticketId)
+  const ticketTime = await TicketCreatedTime(ticketId)
+  const ticketPrice =  await Ticket
+  .findByPk(ticketId)
+    .then(ticket => {
+          return ticket.price 
+      })
+      .catch(console.error)
+
+  if (totalTickets <= 1) {
+    risk += 10
+  }
+  if (totalComments > 3) {
+    risk += 5
+  }
+  if ( ticketPrice < averagePrice ) {
+    const riskFactor = 100 - ((ticketPrice * 100) / averagePrice)
+    console.log('min riskFactor',riskFactor)
+    risk += riskFactor
+  }
+  if ( ticketPrice > averagePrice ) {
+    const riskCalculate = ((ticketPrice * 100) / averagePrice) - 100
+    const decreaseRiskBy = Math.max(10, riskCalculate)
+    console.log('max riskFactor',riskCalculate)
+    console.log('decrease riskFactor',decreaseRiskBy)
+    risk -= decreaseRiskBy
+  }
+  
+  if (risk < 5) {
+    risk = 5
+  }
+  console.log('The risk:',risk)
+  return Math.min(95,risk)
+}
 
 module.exports = {
   TotalTicketsOfAuthor,
-  averagePrice,
-  TotalComments
+  AveragePrice,
+  TotalComments,
+  TicketCreatedTime,
+  CalculateTicketRisk
 }
