@@ -4,7 +4,6 @@ const Ticket = require('../tickets/model')
 const User = require('../users/model')
 const authorization = require('../auth/middleware')
 
-
 const router = new Router()
 
 router.post('/comments',(req, res, next) => {
