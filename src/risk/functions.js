@@ -1,44 +1,42 @@
 const Ticket = require('../tickets/model')
 const Comment = require('../comments/model')
 
-async function TotalTicketsOfAuthor (userId) {
-  const total = await Ticket
-    .count({ where: {'user_id': userId} }).then(total => {
+function TotalTicketsOfAuthor (userId) {
+  return Ticket
+    .count({ where: {'user_id': userId} })
+    .then(total => {
       return total
     })
-  return total  
 }
 
-async function AveragePrice (eventId) {
-  const average_price = await Ticket
+function AveragePrice (eventId) {
+  return Ticket
     .findAndCountAll({ where: {'event_id': eventId} })
     .then(result => {
-      const ticketsSum = result.rows.reduce((totalPrice, ticket) => {
-        return totalPrice += Number(ticket.price)},0)
+      const ticketsSum = result.rows
+        .reduce((totalPrice, ticket) => {
+          return totalPrice += Number(ticket.price)},0)
       const average = ticketsSum / result.count
       return average
     })
     .catch(console.error)
-  return average_price  
 }
 
-async function TotalComments (ticketId) {
-  const total = await Comment
-    .count({ where: {'ticket_id': ticketId} }).then(total => {
+function TotalComments (ticketId) {
+  return Comment
+    .count({ where: {'ticket_id': ticketId} })
+    .then(total => {
       return total
     })
-  return total  
 }
 
-async function TicketCreatedTime (ticketId) {
-  const time =  await Ticket
+function TicketCreatedTime (ticketId) {
+  return Ticket
     .findByPk(ticketId)
     .then(ticket => {
-      console.log('ticket:', ticket.created_at)
           return ticket.created_at 
       })
       .catch(console.error)
-      return time
 }
 
 async function CalculateTicketRisk (userId, eventId, ticketId) {
@@ -80,11 +78,68 @@ async function CalculateTicketRisk (userId, eventId, ticketId) {
   }
   return Math.min(95,Math.floor(risk))
 }
+//>>>>>>>>>>>>>>>>>>>>>>>>>.
+// .then(tickets => {
+//   const ticketsRisk = tickets.map(ticket => {
+//     return CalculateTicketRisk(ticket.user_id,ticket.event_id,ticket.id)
+//     .then(risk => {
+//       return risk
+//     })
+//     .catch(console.error)
+//   })
+//   Promise.all(ticketsRisk)
+//   .then(risks => {
+//     return res.send({ tickets,risks })
+//   })
+//   .catch(console.error)
+// })
+
+// function CalculateTicketRisk (userId, eventId, ticketId) {
+//   let risk = 5
+//   const totalTickets = TotalTicketsOfAuthor(userId)
+//   const averagePrice = AveragePrice(eventId)
+//   const totalComments = TotalComments(ticketId)
+//   const ticketTime = TicketCreatedTime(ticketId)
+//   const ticketPrice = () => {
+//     return Ticket
+//     .findByPk(ticketId)
+//       .then(ticket => {
+//             return ticket.price 
+//         })
+//         .catch(console.error)
+//   } 
+//   console.log('CalculateTicketRisk', totalTickets, averagePrice, totalComments, ticketTime, ticketPrice())
+//   Promise.all([totalTickets, averagePrice, totalComments, ticketTime, ticketPrice()])
+//   .then(resolvedPromises => {
+//     if (resolvedPromises[0] <= 1) {
+//       risk += 10
+//     }
+//     if (resolvedPromises[2] > 3) {
+//       risk += 5
+//     }
+//     if ( resolvedPromises[4] < resolvedPromises[1] ) {
+//       const riskFactor = 100 - ((resolvedPromises[4] * 100) / resolvedPromises[1])
+//       risk += riskFactor
+//     }
+//     if ( resolvedPromises[4] > resolvedPromises[1] ) {
+//       const riskCalculate = ((resolvedPromises[4] * 100) / resolvedPromises[1]) - 100
+//       const decreaseRiskBy = Math.max(10, riskCalculate)
+//       risk -= decreaseRiskBy
+//     }
+//     if (resolvedPromises[3].getHours() < 9 || resolvedPromises[3].getHours() > 17) {
+//       risk += 10
+//     } else {
+//       risk -= 10
+//     }
+  
+//     if (risk < 5) {
+//       risk = 5
+//     }
+//     return Math.min(95,Math.floor(risk))
+//   })
+  
+// }
 
 module.exports = {
-  TotalTicketsOfAuthor,
-  AveragePrice,
-  TotalComments,
-  TicketCreatedTime,
   CalculateTicketRisk
 }
