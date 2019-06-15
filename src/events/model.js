@@ -9,24 +9,24 @@ const Event = sequelize.define('events', {
     allowNull: false
   },
   description: {
-    type: Sequelize.TEXT,
+    type: Sequelize.STRING(1024),
     field: 'description',
     allowNull: false
   },
   picture: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING(1024),
     field: 'picture',
     allowNull: false
   },
   start_time: {
-    // type: Sequelize.DATE,
-    type: Sequelize.STRING,
+    type: Sequelize.DATE,
+    // type: Sequelize.STRING,
     field: 'start_time',
     allowNull: false
   },  
   end_time: {
-    type: Sequelize.STRING,
-    // type: Sequelize.DATE,
+    // type: Sequelize.STRING,
+    type: Sequelize.DATE,
     field: 'end_time',
     allowNull: false
   }, 
