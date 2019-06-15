@@ -2,7 +2,7 @@ const { Router } = require('express')
 const Event = require('./model')
 const User = require('../users/model')
 const authorization = require('../auth/middleware')
-
+const { Op } = require('sequelize')
 
 const router = new Router()
 
@@ -11,13 +11,20 @@ router.get('/events',(req, res, next) => {
   const offset = req.query.offset || 0
 
   Event
-    .findAndCountAll({
-      include:[{ model: User, attributes: ['user_name'] }],
-      limit, 
-      offset
-    })
-    .then(events => res.send({ total:events.count, events:events.rows }))
-    .catch(next)
+      .findAndCountAll({
+        where: {
+          end_time: {
+            [Op.gte]: Date.now()
+          }
+        },
+        include:[{ model: User, attributes: ['user_name'] }],
+        limit, 
+        offset
+      })
+      .then(events => {
+       return res.send({ total:events.count, events:events.rows })
+      })
+      .catch(next)
 })
 
 router.get('/events/:id', (req, res, next) => {
