@@ -1,44 +1,42 @@
 const Ticket = require('../tickets/model')
 const Comment = require('../comments/model')
 
-async function TotalTicketsOfAuthor (userId) {
-  const total = await Ticket
-    .count({ where: {'user_id': userId} }).then(total => {
+function TotalTicketsOfAuthor (userId) {
+  return Ticket
+    .count({ where: {'user_id': userId} })
+    .then(total => {
       return total
     })
-  return total  
 }
 
-async function AveragePrice (eventId) {
-  const average_price = await Ticket
+function AveragePrice (eventId) {
+  return Ticket
     .findAndCountAll({ where: {'event_id': eventId} })
     .then(result => {
-      const ticketsSum = result.rows.reduce((totalPrice, ticket) => {
-        return totalPrice += Number(ticket.price)},0)
+      const ticketsSum = result.rows
+        .reduce((totalPrice, ticket) => {
+          return totalPrice += Number(ticket.price)},0)
       const average = ticketsSum / result.count
       return average
     })
     .catch(console.error)
-  return average_price  
 }
 
-async function TotalComments (ticketId) {
-  const total = await Comment
-    .count({ where: {'ticket_id': ticketId} }).then(total => {
+function TotalComments (ticketId) {
+  return Comment
+    .count({ where: {'ticket_id': ticketId} })
+    .then(total => {
       return total
     })
-  return total  
 }
 
-async function TicketCreatedTime (ticketId) {
-  const time =  await Ticket
+function TicketCreatedTime (ticketId) {
+  return Ticket
     .findByPk(ticketId)
     .then(ticket => {
-      console.log('ticket:', ticket.created_at)
           return ticket.created_at 
       })
       .catch(console.error)
-      return time
 }
 
 async function CalculateTicketRisk (userId, eventId, ticketId) {
@@ -82,9 +80,5 @@ async function CalculateTicketRisk (userId, eventId, ticketId) {
 }
 
 module.exports = {
-  TotalTicketsOfAuthor,
-  AveragePrice,
-  TotalComments,
-  TicketCreatedTime,
   CalculateTicketRisk
 }
