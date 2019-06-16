@@ -27,6 +27,27 @@ router.get('/events',(req, res, next) => {
       .catch(next)
 })
 
+router.get('/past-events',(req, res, next) => {
+  const limit = req.query.limit || 9
+  const offset = req.query.offset || 0
+
+  Event
+      .findAndCountAll({
+        where: {
+          end_time: {
+            [Op.lt]: Date.now()
+          }
+        },
+        include:[{ model: User, attributes: ['user_name'] }],
+        limit, 
+        offset
+      })
+      .then(events => {
+       return res.send({ total:events.count, events:events.rows })
+      })
+      .catch(next)
+})
+
 router.get('/events/:id', (req, res, next) => {
   Event
     .findByPk(req.params.id, { 
