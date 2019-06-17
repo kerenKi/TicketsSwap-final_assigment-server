@@ -18,7 +18,8 @@ router.post('/users',(req, res, next) => {
           message: 'could not find the user'
         })
       } return res.status(201).send({
-        jwt: toJWT({ userId: user.id })
+        jwt: toJWT({ userId: user.id }),
+        user_name: user.user_name
       })
     })
     .catch(next)
