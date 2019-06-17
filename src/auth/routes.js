@@ -50,12 +50,12 @@ router.post('/logins', (req, res)=> {
   }
 })
 
-router.get('/add-event', authorization, (req, res) => {
-  if (res.locals.user) {
-    res.send({
-      user: res.locals.user
-    })
-  } 
-})
+// router.get('/add-event', authorization, (req, res) => {
+//   if (res.locals.user) {
+//     res.send({
+//       user: res.locals.user
+//     })
+//   } 
+// })
 
 module.exports = router
