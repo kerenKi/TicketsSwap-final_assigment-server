@@ -111,7 +111,7 @@ router.get('/tickets/:id', (req, res, next) => {
     }   
   })
   
-  router.put('/tickets/:id',(req, res, next) => {
+  router.put('/tickets/:id',authorization,(req, res, next) => {
     Ticket
     .findByPk(req.params.id)
     .then(ticket => {
@@ -119,7 +119,15 @@ router.get('/tickets/:id', (req, res, next) => {
         return res.status(404).send({
           message: 'could not find the ticket'
         })
-      } return ticket.update(req.body).then(ticket => res.send(ticket))
+      }
+      if (res.locals.user.id !== ticket.user_id) {
+        return res.status(400).send({
+          message: 'you are not authorised to edit the ticket. only the ticket author can edit'
+        })
+      }
+      if (res.locals.user.id === ticket.user_id) {
+        return ticket.update(req.body).then(ticket => res.send(ticket))
+      }
     })
     .catch(next)
   })
