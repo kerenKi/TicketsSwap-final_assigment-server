@@ -7,6 +7,7 @@ const { CalculateTicketRisk } = require('../risk/functions')
 
 const router = new Router()
 
+/////////
 router.post('/tickets',(req, res, next) => {
   Ticket
   .findAll({
@@ -80,6 +81,7 @@ router.get('/tickets/:id', (req, res, next) => {
             message: 'could not find the ticket'
           })
         } else {
+          /////////////////////////
           return Ticket
           .findAll({
             where: {
@@ -126,7 +128,14 @@ router.get('/tickets/:id', (req, res, next) => {
         })
       }
       if (res.locals.user.id === ticket.user_id) {
-        return ticket.update(req.body).then(ticket => res.send(ticket))
+        return ticket.update(req.body)
+          .then(ticket => 
+                  CalculateTicketRisk(ticket.user_id,ticket.event_id,ticket.id)
+                  .then(risk => {
+                  console.log('risk', risk)
+                  return res.send({ticket,risk})
+                  })
+          )
       }
     })
     .catch(next)
