@@ -7,6 +7,7 @@ const { CalculateTicketRisk } = require('../risk/functions')
 
 const router = new Router()
 
+/////////
 router.post('/tickets',(req, res, next) => {
   Ticket
   .findAll({
@@ -80,6 +81,7 @@ router.get('/tickets/:id', (req, res, next) => {
             message: 'could not find the ticket'
           })
         } else {
+          /////////////////////////
           return Ticket
           .findAll({
             where: {
@@ -111,7 +113,7 @@ router.get('/tickets/:id', (req, res, next) => {
     }   
   })
   
-  router.put('/tickets/:id',(req, res, next) => {
+  router.put('/tickets/:id',authorization,(req, res, next) => {
     Ticket
     .findByPk(req.params.id)
     .then(ticket => {
@@ -119,7 +121,22 @@ router.get('/tickets/:id', (req, res, next) => {
         return res.status(404).send({
           message: 'could not find the ticket'
         })
-      } return ticket.update(req.body).then(ticket => res.send(ticket))
+      }
+      if (res.locals.user.id !== ticket.user_id) {
+        return res.status(400).send({
+          message: 'you are not authorised to edit the ticket. only the ticket author can edit'
+        })
+      }
+      if (res.locals.user.id === ticket.user_id) {
+        return ticket.update(req.body)
+          .then(ticket => 
+                  CalculateTicketRisk(ticket.user_id,ticket.event_id,ticket.id)
+                  .then(risk => {
+                  console.log('risk', risk)
+                  return res.send({ticket,risk})
+                  })
+          )
+      }
     })
     .catch(next)
   })

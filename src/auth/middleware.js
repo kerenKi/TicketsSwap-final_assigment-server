@@ -5,7 +5,7 @@ function authorization(req, res, next) {
   //req.headers.authorization.split will be an array ['Bearer',very long token]
   const auth = req.headers.authorization && req.headers.authorization.split(' ')
   // if the authorization header exist,
-  // when the first item in the array is 'Bearer' and the second item in is a token:
+  // when the first item in the array is 'Bearer' and the second item is a token:
   if (auth && auth[0] === 'Bearer' && auth[1]) {
     try {
       //auth[1] is the token that is passed to toData to get the data
